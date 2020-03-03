@@ -42,6 +42,13 @@ $input = <<<EOF
 ^XZ
 EOF;
 
+/**
+ * Scale ZPL 203dpi -> 300dpi
+ * @param $rawCommands
+ * @param float|int $scaleFactor
+ * @return string
+ */
+
 function scaleZPL($rawCommands, $scaleFactor = 300/203) {
 
     $sectionData = explode("^", $rawCommands);
@@ -52,7 +59,7 @@ function scaleZPL($rawCommands, $scaleFactor = 300/203) {
     foreach ($cmdData as $i => $cmds) {
         foreach ($sectionData as $j => $sections) {
             if (strrpos($sections, $cmds) === 0) {
-                $sectionData[$j] = scaleSection($cmds, $sections, $scaleFactor);
+                $sectionData[$j] = scaleCell($cmds, $sections, $scaleFactor);
             }
         }
 	}
@@ -61,9 +68,9 @@ function scaleZPL($rawCommands, $scaleFactor = 300/203) {
 }
 
 /*
- * Scales all integers found in a designated section
+ * Scales each cell
  */
-function scaleSection($cmd, $section, $scaleFactor) {
+function scaleCell($cmd, $section, $scaleFactor) {
 
     //echo $cmd.$section ." => ";
 
